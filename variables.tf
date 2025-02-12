@@ -1,6 +1,7 @@
 variable "aws_region" {
   description = "AWS region"
   type        = string
+  default     = "us-west-2"
 }
 
 variable "web_app_ami" {
@@ -26,29 +27,26 @@ variable "private_key_path" {
 variable "db_volume_id" {
   description = "ID of EBS volume for database"
   type        = string
-}
-
-variable "user_name" {
-  description = "User name for ssh connection"
-  type        = string
+  default     = "vol-0b3ee064272bb7099"
 }
 
 variable "db_name" {
   description = "Database name"
   type        = string
+  default     = "recommend"
 }
 
-variable "db_password" {
+variable "database_password" {
   description = "Database password"
   type        = string
 }
 
-variable "db_user" {
+variable "database_username" {
   description = "Database user"
   type        = string
 }
 
-variable "flask_secret" {
+variable "webapp_secret_key" {
   description = "Secret key for Flask app"
   type        = string
 }

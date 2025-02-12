@@ -14,10 +14,10 @@ resource "aws_instance" "web_app_instance" {
     
     echo "Creating .env file..."
     echo "DB_HOST=${aws_instance.database_instance.private_ip}" > .env
-    echo "DB_USER=${var.db_user}" >> .env
-    echo "DB_PASSWORD=${var.db_password}" >> .env
+    echo "DB_USER=${var.database_username}" >> .env
+    echo "DB_PASSWORD=${var.database_password}" >> .env
     echo "DB_NAME=${var.db_name}" >> .env
-    echo "FLASK_SECRET=${var.flask_secret}" >> .env
+    echo "FLASK_SECRET=${var.webapp_secret_key}" >> .env
 
     sudo chown csye6225:csye6225 /opt/webapp/.env
     sudo chmod 600 /opt/webapp/.env
@@ -32,7 +32,7 @@ resource "aws_instance" "web_app_instance" {
   }
 }
 
-# database instance
+# Database instance
 resource "aws_instance" "database_instance" {
   ami           = var.database_ami
   instance_type = "t2.micro"
@@ -69,12 +69,12 @@ resource "null_resource" "init_db_volume" {
 
       # Bastion host configuration
       bastion_host        = aws_instance.web_app_instance.public_ip
-      bastion_user        = var.user_name
+      bastion_user        = "ubuntu"
       bastion_private_key = file(var.private_key_path)
 
       # Connect to database instance using private IP
       host        = aws_instance.database_instance.private_ip
-      user        = var.user_name
+      user        = "ubuntu"
       private_key = file(var.private_key_path)
     }
 
