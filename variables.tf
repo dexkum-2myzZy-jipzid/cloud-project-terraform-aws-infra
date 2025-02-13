@@ -20,10 +20,10 @@ variable "key_name" {
   default     = "cyse6225-assignment2"
 }
 
-variable "private_key_path" {
-  description = "Path to private key file for SSH"
-  type        = string
-}
+# variable "private_key_path" {
+#   description = "Path to private key file for SSH"
+#   type        = string
+# }
 
 variable "db_volume_id" {
   description = "ID of EBS volume for database"
