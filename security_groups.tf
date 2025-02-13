@@ -1,12 +1,12 @@
 # Web application security group
 resource "aws_security_group" "web_app_sg" {
   name        = "WebAppSecurityGroup"
-  description = "Allow HTTP (8080) and SSH (22)"
+  description = "Allow HTTP (80) and SSH (22)"
   vpc_id      = aws_vpc.my_vpc.id
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -45,13 +45,13 @@ resource "aws_security_group" "database_sg" {
     security_groups = [aws_security_group.web_app_sg.id]
   }
 
-  ingress {
-    description     = "Allow SSH from Bastion Host"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.web_app_sg.id]
-  }
+  # ingress {
+  #   description     = "Allow SSH from Bastion Host"
+  #   from_port       = 22
+  #   to_port         = 22
+  #   protocol        = "tcp"
+  #   security_groups = [aws_security_group.web_app_sg.id]
+  # }
 
   # Allow all outbound traffic
   egress {

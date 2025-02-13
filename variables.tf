@@ -9,7 +9,7 @@ variable "web_app_ami" {
   type        = string
 }
 
-variable "database_ami" {
+variable "mysql_ami_id" {
   description = "AMI ID for database instance"
   type        = string
 }
