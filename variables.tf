@@ -17,6 +17,7 @@ variable "mysql_ami_id" {
 variable "key_name" {
   description = "EC2 key pair name"
   type        = string
+  default     = "cyse6225-assignment2"
 }
 
 variable "private_key_path" {
