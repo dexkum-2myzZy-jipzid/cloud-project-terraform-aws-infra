@@ -4,7 +4,7 @@ variable "aws_region" {
   default     = "us-west-2"
 }
 
-variable "web_app_ami" {
+variable "webapp_ami_id" {
   description = "AMI ID for web app instance"
   type        = string
 }

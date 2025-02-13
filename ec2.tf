@@ -1,6 +1,6 @@
 # WebApp instance
 resource "aws_instance" "web_app_instance" {
-  ami           = var.web_app_ami
+  ami           = var.webapp_ami_id
   instance_type = "t2.micro"
   key_name      = var.key_name
 
