@@ -42,77 +42,7 @@ resource "aws_instance" "database_instance" {
   vpc_security_group_ids      = [aws_security_group.database_sg.id]
   associate_public_ip_address = false
 
-  user_data = base64encode(<<-EOF
-    #!/bin/bash
-    until lsblk | grep -q xvdf; do
-      echo "Waiting for EBS volume..."
-      sleep 10
-    done
-
-    sleep 30
-
-    # mount EBS volume
-    sudo mount -a
-
-    # setting Permissions
-    sudo chown -R mysql:mysql /mnt/mysql-data
-
-    # stop and start MySQL
-    sudo systemctl stop mysql
-    sudo systemctl start mysql
-  EOF
-  )
-
   tags = {
     Name = "DatabaseInstance"
   }
 }
-
-# Attach existing EBS volume to database instance
-resource "aws_volume_attachment" "db_data_attachment" {
-  device_name = "/dev/sdf"
-  volume_id   = var.db_volume_id
-  instance_id = aws_instance.database_instance.id
-
-  force_detach = true
-}
-
-# # Initialize EBS volume using null_resource + remote-exec
-# resource "null_resource" "init_db_volume" {
-#   depends_on = [
-#     aws_instance.database_instance,
-#     aws_volume_attachment.db_data_attachment
-#   ]
-
-#   provisioner "remote-exec" {
-#     connection {
-#       type = "ssh"
-
-#       # Bastion host configuration
-#       bastion_host        = aws_instance.web_app_instance.public_ip
-#       bastion_user        = "ubuntu"
-#       bastion_private_key = file(var.private_key_path)
-
-#       # Connect to database instance using private IP
-#       host        = aws_instance.database_instance.private_ip
-#       user        = "ubuntu"
-#       private_key = file(var.private_key_path)
-#     }
-
-#     inline = [
-#       "echo 'Checking EBS volume...'",
-#       "if ! lsblk | grep -q xvdf; then",
-#       "  echo 'ERROR: EBS volume not detected!'",
-#       "  exit 1",
-#       "fi",
-#       "echo 'Mounting EBS volume...'",
-#       "sudo mkdir -p /mnt/mysql-data || exit 1",
-#       "sudo mount /dev/xvdf /mnt/mysql-data || true",
-#       "echo '/dev/xvdf /mnt/mysql-data ext4 defaults,nofail 0 2' | sudo tee -a /etc/fstab || exit 1",
-#       "echo 'Setting permissions...'",
-#       "sudo chown -R mysql:mysql /mnt/mysql-data || exit 1",
-#       "echo 'Restarting MySQL service...'",
-#       "sudo systemctl restart mysql || exit 1"
-#     ]
-#   }
-# }
