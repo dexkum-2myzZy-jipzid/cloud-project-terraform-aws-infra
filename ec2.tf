@@ -49,7 +49,7 @@ resource "aws_instance" "database_instance" {
 
 
 resource "null_resource" "run_tests" {
-  depends_on = [aws_instance.app]
+  depends_on = [aws_instance.web_app_instance]
 
   provisioner "local-exec" {
     command = <<EOT
