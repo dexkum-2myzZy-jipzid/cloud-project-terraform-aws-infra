@@ -46,3 +46,15 @@ resource "aws_instance" "database_instance" {
     Name = "DatabaseInstance"
   }
 }
+
+
+resource "null_resource" "run_tests" {
+  depends_on = [aws_instance.app]
+
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "Waiting for instance to be ready..."
+      sleep 30
+    EOT
+  }
+}
