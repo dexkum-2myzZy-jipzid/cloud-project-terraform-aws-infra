@@ -25,11 +25,11 @@ variable "key_name" {
 #   type        = string
 # }
 
-variable "db_volume_id" {
-  description = "ID of EBS volume for database"
-  type        = string
-  default     = "vol-0b3ee064272bb7099"
-}
+# variable "db_volume_id" {
+#   description = "ID of EBS volume for database"
+#   type        = string
+#   default     = "vol-0b3ee064272bb7099"
+# }
 
 variable "db_name" {
   description = "Database name"
