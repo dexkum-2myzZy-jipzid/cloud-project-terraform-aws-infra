@@ -1,6 +1,12 @@
 name: Integration Tests
 
-on: workflow_dispatch # Allows manual trigger
+on:
+  workflow_dispatch: # Allows manual trigger
+    inputs:
+      API_HOST:
+        description: 'Description of API_HOST'
+        required: true
+        type: string
 #   push:
 #     branches:
 #       - main # Runs on push to the main branch
