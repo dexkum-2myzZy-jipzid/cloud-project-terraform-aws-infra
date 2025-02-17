@@ -1,4 +1,4 @@
-name: Terraform Deploy & Integration Tests
+name: Terraform Deploy (include Integration Tests)
 
 on: workflow_dispatch # Allows manual trigger
 #   push:
@@ -6,7 +6,7 @@ on: workflow_dispatch # Allows manual trigger
 #       - main  # Runs on push to main branch
 
 jobs:
-  assignment-grader:
+  terraform:
     runs-on: ubuntu-latest
     environment:
       name: AWS_DEPLOYMENT
@@ -67,6 +67,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: 'Integration Tests'
+          inputs: API_HOST="${{ env.API_HOST }}"
 
       - name: ❌ Destroy Terraform Infrastructure
         if: always() # Ensures destruction runs even if tests fail

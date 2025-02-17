@@ -13,6 +13,12 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
+      - name: 📝 Write API_HOST to `tests/.env`
+        run: |
+          echo "API_HOST=${{ github.event.inputs.API_HOST }}" > tests/.env
+          echo "✅ API_HOST saved: ${{ github.event.inputs.API_HOST }}"
+          cat tests/.env
+
       - name: 🏗️ Set Up Python Environment
         uses: actions/setup-python@v4
         with:
@@ -24,12 +30,6 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           pip install -r requirements.txt
-
-      - name: 🔑 Configure Environment Variables
-        env:
-          API_HOST: ${{ secrets.API_HOST }}
-        run: |
-          echo "API_HOST=$API_HOST" > tests/.env
 
       - name: ✅ Run `pytest`
         run: |
