@@ -84,6 +84,7 @@ jobs:
           cd tests
           source .venv/bin/activate
           pytest --disable-warnings -v
+        working-directory: tests
 
       - name: ❌ Destroy Terraform Infrastructure
         if: always() # Ensures destruction runs even if tests fail
