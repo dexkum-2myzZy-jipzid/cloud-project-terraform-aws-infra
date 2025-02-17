@@ -13,17 +13,17 @@ jobs:
       name: AWS_DEPLOYMENT
 
     steps:
-      - name: 📥 Checkout Code
+      - name: 📦 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔑 Configure AWS Credentials
+      - name: 🔐 Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
 
-      - name: 🏗️ Setup Terraform
+      - name: 🛠️ Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
@@ -73,20 +73,19 @@ jobs:
           python-version: '3.13'
 
       - name: 📦 Install Dependencies
+        working-directory: tests
         run: |
-          cd tests
           python -m venv .venv
           source .venv/bin/activate
           pip install -r requirements.txt
 
       - name: ✅ Run `pytest`
+        working-directory: tests
         run: |
-          cd tests
           source .venv/bin/activate
           pytest --disable-warnings -v
-        working-directory: tests
 
-      - name: ❌ Destroy Terraform Infrastructure
+      - name: 🗑️ Destroy Terraform Infrastructure
         if: always() # Ensures destruction runs even if tests fail
         continue-on-error: true # Prevents workflow from failing due to destroy issues
         run: terraform destroy -auto-approve
