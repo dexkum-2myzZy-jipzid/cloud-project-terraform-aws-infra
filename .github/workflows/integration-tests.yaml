@@ -1,0 +1,38 @@
+name: Integration Tests
+
+on: workflow_dispatch # Allows manual trigger
+#   push:
+#     branches:
+#       - main # Runs on push to the main branch
+
+jobs:
+  integration_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Set Up Python Environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: 📦 Install Dependencies
+        run: |
+          cd tests
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: 🔑 Configure Environment Variables
+        env:
+          API_HOST: ${{ secrets.API_HOST }}
+        run: |
+          echo "API_HOST=$API_HOST" > tests/.env
+
+      - name: ✅ Run `pytest`
+        run: |
+          cd tests
+          source .venv/bin/activate
+          pytest --disable-warnings -v
