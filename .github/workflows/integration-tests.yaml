@@ -63,8 +63,8 @@ jobs:
 
       - name: 📝 Write API_HOST to `tests/.env`
         run: |
-          echo "API_HOST=${{ env.WEBAPP_IP }}" > tests/.env
-          echo "✅ API_HOST saved: ${{ env.WEBAPP_IP }}"
+          echo "APP_HOST=${{ env.WEBAPP_IP }}" > tests/.env
+          echo "✅ APP_HOST saved: ${{ env.WEBAPP_IP }}"
           cat tests/.env
 
       - name: 🏗️ Set Up Python Environment
