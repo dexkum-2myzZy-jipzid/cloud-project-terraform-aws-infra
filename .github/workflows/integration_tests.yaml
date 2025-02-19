@@ -46,7 +46,7 @@ jobs:
           echo "database_password = \"${{ secrets.DATABASE_PASSWORD }}\"" >> terraform.tfvars
           echo "webapp_secret_key = \"${{ secrets.WEBAPP_SECRET_KEY }}\"" >> terraform.tfvars
           echo "Terraform Variables Configured ✅"
-          cat terraform.tfvars
+          # cat terraform.tfvars
 
       - name: 📋 Terraform Plan
         run: terraform plan
@@ -62,7 +62,7 @@ jobs:
         run: |
           echo "APP_HOST=${{ env.WEBAPP_IP }}" > tests/.env
           echo "✅ APP_HOST saved: ${{ env.WEBAPP_IP }}"
-          cat tests/.env
+          # cat tests/.env
 
       - name: 🏗️ Set Up Python Environment
         uses: actions/setup-python@v4

@@ -53,8 +53,30 @@ resource "null_resource" "run_tests" {
 
   provisioner "local-exec" {
     command = <<EOT
-      echo "Waiting for instance to be ready..."
-      sleep 30
+      bash -c '
+        URL="http://${aws_instance.web_app_instance.public_ip}/v1/healthcheck"
+        MAX_RETRIES=30  # 30 retries (2.5 minutes total)
+        RETRY_INTERVAL=5  # 5 seconds per retry
+
+        echo "Checking endpoint: $URL"
+
+        for i in $(seq 1 $MAX_RETRIES); do
+          HTTP_CODE=$(curl -o /dev/null -s -w "%%{http_code}" "$URL")
+
+          echo "Attempt $i: HTTP Status $HTTP_CODE"
+
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "Endpoint is healthy! Exiting..."
+            exit 0
+          fi
+
+          echo "Waiting $RETRY_INTERVAL seconds before retrying..."
+          sleep $RETRY_INTERVAL
+        done
+
+        echo "Max retries reached. Endpoint did not return 200. Exiting with failure."
+        exit 1
+      '
     EOT
   }
 }
