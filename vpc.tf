@@ -54,3 +54,55 @@ resource "aws_route_table_association" "public_subnet_association" {
   subnet_id      = aws_subnet.public_subnet.id
   route_table_id = aws_route_table.public_route_table.id
 }
+
+resource "aws_security_group" "vpc_endpoint_sg" {
+  name        = "vpc-endpoint-sg"
+  description = "Security group for VPC endpoints (CloudWatch)"
+  vpc_id      = aws_vpc.my_vpc.id
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.my_vpc.cidr_block]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "VPCEndpointSG"
+  }
+}
+
+
+resource "aws_vpc_endpoint" "cloudwatch_monitoring" {
+  vpc_id            = aws_vpc.my_vpc.id
+  service_name      = "com.amazonaws.${var.aws_region}.monitoring"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [aws_subnet.private_subnet.id]
+  security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
+
+  private_dns_enabled = true
+  tags = {
+    Name = "CloudWatchMonitoringEndpoint"
+  }
+}
+
+
+resource "aws_vpc_endpoint" "cloudwatch_logs" {
+  vpc_id            = aws_vpc.my_vpc.id
+  service_name      = "com.amazonaws.${var.aws_region}.logs"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [aws_subnet.private_subnet.id]
+  security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
+
+  private_dns_enabled = true
+  tags = {
+    Name = "CloudWatchLogsEndpoint"
+  }
+}
