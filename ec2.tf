@@ -3,6 +3,7 @@ resource "aws_instance" "web_app_instance" {
   ami           = var.webapp_ami_id
   instance_type = "t2.micro"
   key_name      = var.key_name
+  iam_instance_profile = aws_iam_instance_profile.ec2_monitoring_profile.name
 
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.web_app_sg.id]
@@ -37,6 +38,7 @@ resource "aws_instance" "database_instance" {
   ami           = var.mysql_ami_id
   instance_type = "t2.micro"
   key_name      = var.key_name
+  iam_instance_profile = aws_iam_instance_profile.ec2_monitoring_profile.name
 
   subnet_id                   = aws_subnet.private_subnet.id
   vpc_security_group_ids      = [aws_security_group.database_sg.id]
