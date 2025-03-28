@@ -51,3 +51,9 @@ variable "webapp_secret_key" {
   description = "Secret key for Flask app"
   type        = string
 }
+
+variable "domain_name" {
+  description = "The domain name for Route 53 lookup"
+  type        = string
+  default     = "dexmario.me."
+}

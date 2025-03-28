@@ -1,6 +1,6 @@
 resource "aws_iam_role" "ec2_monitoring_role" {
   name = "EC2MonitoringRole"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -13,7 +13,7 @@ resource "aws_iam_role" "ec2_monitoring_role" {
       }
     ]
   })
-  
+
   tags = {
     Name = "EC2MonitoringRole"
   }
