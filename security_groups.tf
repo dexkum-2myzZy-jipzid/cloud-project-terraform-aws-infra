@@ -1,12 +1,19 @@
 # Web application security group
 resource "aws_security_group" "web_app_sg" {
   name        = "WebAppSecurityGroup"
-  description = "Allow HTTP (80) and SSH (22)"
+  description = "Allow HTTP (8080), and SSH (22)"
   vpc_id      = aws_vpc.my_vpc.id
 
+  # ingress {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
+
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -88,5 +95,30 @@ resource "aws_security_group" "vpc_endpoint_sg" {
 
   tags = {
     Name = "VPCEndpointSG"
+  }
+}
+
+resource "aws_security_group" "nlb_sg" {
+  name        = "nlb-sg"
+  description = "Security group for the Network Load Balancer"
+  vpc_id      = aws_vpc.my_vpc.id
+
+  ingress {
+    description = "Allow inbound TCP traffic on port 80 from anywhere"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "NLB-SecurityGroup"
   }
 }

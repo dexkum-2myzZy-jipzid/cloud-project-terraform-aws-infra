@@ -56,10 +56,10 @@ resource "aws_route_table_association" "public_subnet_association" {
 }
 
 resource "aws_vpc_endpoint" "cloudwatch_monitoring" {
-  vpc_id            = aws_vpc.my_vpc.id
-  service_name      = "com.amazonaws.${var.aws_region}.monitoring"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.private_subnet.id]
+  vpc_id             = aws_vpc.my_vpc.id
+  service_name       = "com.amazonaws.${var.aws_region}.monitoring"
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = [aws_subnet.private_subnet.id]
   security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
 
   private_dns_enabled = true
@@ -70,10 +70,10 @@ resource "aws_vpc_endpoint" "cloudwatch_monitoring" {
 
 
 resource "aws_vpc_endpoint" "cloudwatch_logs" {
-  vpc_id            = aws_vpc.my_vpc.id
-  service_name      = "com.amazonaws.${var.aws_region}.logs"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.private_subnet.id]
+  vpc_id             = aws_vpc.my_vpc.id
+  service_name       = "com.amazonaws.${var.aws_region}.logs"
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = [aws_subnet.private_subnet.id]
   security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
 
   private_dns_enabled = true

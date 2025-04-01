@@ -1,12 +1,17 @@
 # WebApp instance
 resource "aws_instance" "web_app_instance" {
-  ami           = var.webapp_ami_id
-  instance_type = "t2.micro"
-  key_name      = var.key_name
+  count                = 3
+  ami                  = var.webapp_ami_id
+  instance_type        = "t2.micro"
+  key_name             = var.key_name
   iam_instance_profile = aws_iam_instance_profile.ec2_monitoring_profile.name
 
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.web_app_sg.id]
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "optional"
+  }
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
@@ -35,9 +40,9 @@ resource "aws_instance" "web_app_instance" {
 
 # Database instance
 resource "aws_instance" "database_instance" {
-  ami           = var.mysql_ami_id
-  instance_type = "t2.micro"
-  key_name      = var.key_name
+  ami                  = var.mysql_ami_id
+  instance_type        = "t2.micro"
+  key_name             = var.key_name
   iam_instance_profile = aws_iam_instance_profile.ec2_monitoring_profile.name
 
   subnet_id                   = aws_subnet.private_subnet.id
@@ -51,12 +56,12 @@ resource "aws_instance" "database_instance" {
 
 
 resource "null_resource" "run_tests" {
-  depends_on = [aws_instance.web_app_instance]
+  depends_on = [aws_route53_record.api_cname]
 
   provisioner "local-exec" {
     command = <<EOT
       bash -c '
-        URL="http://${aws_instance.web_app_instance.public_ip}/v1/healthcheck"
+        URL="http://api.dexmario.me/v1/healthcheck"
         MAX_RETRIES=30  # 30 retries (2.5 minutes total)
         RETRY_INTERVAL=5  # 5 seconds per retry
 
