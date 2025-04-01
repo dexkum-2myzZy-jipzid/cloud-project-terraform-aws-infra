@@ -1,0 +1,4 @@
+student_name=Liang Chen
+api_domain_name=api.dexmario.me
+assignment_repository=https://github.com/neu-csye6245/assignment-2-cloud-native-web-application-dexkum-2myzZy-jipzid
+terraform_repository=https://github.com/neu-csye6245/cloud-project-terraform-aws-infra-dexkum-2myzZy-jipzid
